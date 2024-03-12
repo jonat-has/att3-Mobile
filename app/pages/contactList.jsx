@@ -1,23 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import profile from '../../assets/profile.png'
+import axios from 'axios';
 
 export default function ContactListScreen({ navigation }) {
-  const [contacts, setContacts] = useState([
-    { id: '1', name: 'Jonathas', phoneNumber: '81 85911445' },
-    { id: '2', name: 'Gabriel', phoneNumber: '81 93479260' },
-  ]);
+  const [contacts, setContacts] = useState([]);
 
-  const AlterarContato = () => {
-    navigation.navigate('AlterarContato');
+  useEffect(() => {
+    axios.get('http://192.168.18.5:3000/contatos')
+      .then((response) => {
+        setContacts(response.data);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [contacts]);
+  
+
+  const AlterarContato = (id) => {
+    navigation.navigate('AlterarContato', {id});
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.contactItem} onPress={AlterarContato} >
+    <TouchableOpacity style={styles.contactItem} onPress={() => AlterarContato(item.id)} >
       <Image style={{width:50,height:50}} source={profile} />
       <View style={styles.textContainer}>
-      <Text>{item.name}</Text>
-      <Text>{item.phoneNumber}</Text>
+      <Text>{item.nome}</Text>
+      <Text>{item.telefone}</Text>
       </View>
     </TouchableOpacity>
   );

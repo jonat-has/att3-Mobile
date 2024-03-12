@@ -1,14 +1,30 @@
 import { StyleSheet, View, Image, TextInput, TouchableOpacity, Text } from 'react-native';
 import { useState } from 'react';
+import axios from 'axios';
 
 export default function AdicionarContato({ navigation }) {
 
   const [email,setEmail] = useState('')
   const [nome,setNome] = useState('')
-  const [senha,setTelefone] = useState('')
+  const [telefone,setTelefone] = useState('')
 
 
   const Salvar = () => {
+
+    const data = {
+      email: email,
+      nome: nome,
+      telefone: telefone,
+    }
+
+
+    axios.post('http://192.168.18.5:3000/contatos', data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     navigation.navigate('ContactList');
   };
 
