@@ -1,20 +1,37 @@
 import { StyleSheet, View, Image, TextInput, TouchableOpacity, Text } from 'react-native';
 import profile from '../../assets/profile.png'
+import {  getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
+import { app } from '../../service/firebaseConfig';
 
 export default function RegisterScreen({ navigation }) {
-
   const [email,setEmail] = useState('')
   const [nome,setNome] = useState('')
   const [senha,setSenha] = useState('')
 
-  const cadastrar = () => {
-    alert(`Cadastrado com sucesso!
-    Nome: ${nome}
-    Email: ${email}
-    Senha: ${senha}`);
-    navigation.navigate('Login');
-  }
+  const auth = getAuth(app);
+
+  const cadastrar = async () => {
+    
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    console.log('Email:' + email)
+    console.log('Senha:' + senha)
+
+    try {
+      await createUserWithEmailAndPassword(auth, email + '', senha);
+      alert('Conta Criada com sucesso')
+      navigation.navigate('Login');
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+      // Handle errors appropriately, e.g., display an error message to the user
+    }
+  };
 
   const handleLogin = () => {
     navigation.navigate('Login');

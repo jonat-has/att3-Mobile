@@ -1,4 +1,4 @@
-// App.js
+
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -24,6 +24,8 @@ const AddContactButton = () => {
 };
 
 export default function App() {
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
